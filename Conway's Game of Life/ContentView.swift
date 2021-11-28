@@ -26,7 +26,7 @@ struct ContentView: View {
                 LinearGradient(colors: [.pink, .purple], startPoint: .topLeading, endPoint: .bottomTrailing)
                     .edgesIgnoringSafeArea(.all)
                 VStack {
-                    Stepper("Grid Length - \(gridLength)", value: $gridLength, in: 1...80)
+                    Stepper("Grid Length - \(gridLength)", value: $gridLength, in: 1...60)
                         .padding(10)
                         .background(.regularMaterial)
                         .cornerRadius(15)
@@ -181,11 +181,14 @@ struct ContentView: View {
         }
         //Find Birthing Cells
         for i in 0...gridLength-1 {
+            var rowAbove: [Bool] = []
+            var rowBelow: [Bool] = []
+            let row = matrixCopy[i]
+            if i > 0 { rowAbove = matrixCopy[i-1] }
+            if i < (gridLength-1) { rowBelow = matrixCopy[i+1] }
+            if matrix[i].contains(true) || rowAbove.contains(true) || rowBelow.contains(true) {
                 for i2 in 0...gridLength-1 {
                     var touchingCount = 0
-                    let row = matrixCopy[i]
-                    var rowAbove: [Bool] = []
-                    var rowBelow: [Bool] = []
                     if i > 0 { rowAbove = matrixCopy[i-1] }
                     if i < (gridLength-1) { rowBelow = matrixCopy[i+1] }
                     
@@ -233,6 +236,7 @@ struct ContentView: View {
                         var row = matrix[i]
                         row[i2] = true
                         matrix[i] = row
+                    }
                 }
             }
         }
@@ -253,7 +257,7 @@ struct cell: View {
     var body: some View {
         Rectangle()
             .scaledToFit()
-            .foregroundColor(array[x] ? .black : .white)
+            .foregroundColor(array[x] ? Color.black : Color.white)
             .border(.black, width: 0.2)
     }
 }
