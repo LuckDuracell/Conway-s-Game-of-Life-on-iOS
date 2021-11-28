@@ -23,7 +23,7 @@ struct ContentView: View {
     var body: some View {
         NavigationView {
             ZStack {
-                Color.pink
+                LinearGradient(colors: [.pink, .purple], startPoint: .topLeading, endPoint: .bottomTrailing)
                     .edgesIgnoringSafeArea(.all)
                 VStack {
                     Stepper("Grid Length - \(gridLength)", value: $gridLength, in: 1...80)
@@ -36,7 +36,7 @@ struct ContentView: View {
                             Text("Iteration - \(iteration)")
                             Spacer()
                             Button {
-                                iterate()
+                                if matrix.isEmpty != true { iterate() }
                             } label: {
                                 Image(systemName: "plus")
                                     .foregroundColor(.primary)
@@ -55,7 +55,7 @@ struct ContentView: View {
                                     .background(Color.gray.opacity(0.18))
                                     .cornerRadius(10)
                             } .onReceive(timer) { time in
-                                if playing {
+                                if playing && (matrix.isEmpty == false) {
                                     iterate()
                                 }
                             }
@@ -230,7 +230,6 @@ struct ContentView: View {
                         }
                     }
                     if touchingCount == 3 {
-                        print("birth at \(i2),\(i)")
                         var row = matrix[i]
                         row[i2] = true
                         matrix[i] = row
